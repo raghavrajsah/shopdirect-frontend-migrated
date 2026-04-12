@@ -2,12 +2,18 @@ import { Link } from 'react-router-dom';
 import formatPrice from '../utils/formatPrice';
 import ReviewStars from './ReviewStars';
 import { ROUTES } from '../constants/routes';
+import type { NormalizedProduct } from '../types';
 
-function buildProductHref(productId) {
+function buildProductHref(productId: string): string {
   return ROUTES.productDetail.replace(':productId', productId);
 }
 
-export default function ProductCard(props) {
+interface ProductCardProps {
+  product: NormalizedProduct;
+  onAddToCart: (product: NormalizedProduct, quantity: number) => void;
+}
+
+export default function ProductCard(props: ProductCardProps): React.JSX.Element {
   var product = props.product;
   var onAddToCart = props.onAddToCart;
 
@@ -45,7 +51,7 @@ export default function ProductCard(props) {
         </div>
 
         <div className="tag-list">
-          {(product.badges || []).map(function mapBadge(badge) {
+          {(product.badges || []).map(function mapBadge(badge: string) {
             return (
               <span key={badge} className="tag">
                 {badge}

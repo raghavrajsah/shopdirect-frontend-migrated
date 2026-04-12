@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 
-export default function QuantitySelector(props) {
+interface QuantitySelectorProps {
+  value?: number;
+  min?: number;
+  max?: number;
+  onChange?: (value: number) => void;
+}
+
+export default function QuantitySelector(props: QuantitySelectorProps): React.JSX.Element {
   var value = props.value || 1;
   var min = props.min || 1;
   var max = props.max || 12;
   var onChange = props.onChange;
-  var [internalValue, setInternalValue] = useState(value);
+  var [internalValue, setInternalValue] = useState<number>(value);
 
   useEffect(
     function syncExternalValue() {
@@ -14,7 +21,7 @@ export default function QuantitySelector(props) {
     [value]
   );
 
-  function updateValue(nextValue) {
+  function updateValue(nextValue: number | string): void {
     var parsedValue = Number(nextValue);
     var clampedValue = Math.min(max, Math.max(min, parsedValue || min));
     setInternalValue(clampedValue);
@@ -33,7 +40,7 @@ export default function QuantitySelector(props) {
       </button>
       <input
         value={internalValue}
-        onChange={function handleChange(event) {
+        onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
           updateValue(event.target.value);
         }}
       />

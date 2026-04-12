@@ -1,4 +1,15 @@
-export default function SearchBar(props) {
+interface SearchBarProps {
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  selectedCategory: string;
+  onCategoryChange: (value: string) => void;
+  categories?: string[];
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  onClear: () => void;
+}
+
+export default function SearchBar(props: SearchBarProps): React.JSX.Element {
   return (
     <section className="search-shell section-card">
       <div className="stack">
@@ -11,18 +22,18 @@ export default function SearchBar(props) {
           className="search-input"
           placeholder="Search products"
           value={props.searchTerm}
-          onChange={function handleChange(event) {
+          onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
             props.onSearchChange(event.target.value);
           }}
         />
 
         <select
           value={props.selectedCategory}
-          onChange={function handleCategoryChange(event) {
+          onChange={function handleCategoryChange(event: React.ChangeEvent<HTMLSelectElement>) {
             props.onCategoryChange(event.target.value);
           }}
         >
-          {(props.categories || []).map(function mapCategory(category) {
+          {(props.categories || []).map(function mapCategory(category: string) {
             return (
               <option key={category} value={category}>
                 {category === 'all' ? 'All categories' : category}
@@ -33,7 +44,7 @@ export default function SearchBar(props) {
 
         <select
           value={props.sortBy}
-          onChange={function handleSortChange(event) {
+          onChange={function handleSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
             props.onSortChange(event.target.value);
           }}
         >
