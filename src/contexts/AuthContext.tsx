@@ -1,54 +1,70 @@
 import { createContext, useEffect, useState } from 'react';
 import { getProfile, login, logout, saveProfile } from '../services/authService';
 import { REQUEST_STATUS } from '../constants/statuses';
+import type { LoginCredentials, RequestStatus, User } from '../types';
 
-var AuthContext = createContext(null);
+interface AuthContextValue {
+  currentUser: User | null;
+  status: RequestStatus;
+  error: string;
+  isAuthenticated: boolean;
+  loginUser: (credentials: LoginCredentials) => Promise<User | null>;
+  logoutUser: () => Promise<void>;
+  refreshProfile: () => Promise<User | null>;
+  updateUser: (updates: Partial<User>) => Promise<User>;
+}
 
-export function AuthProvider(props) {
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+var AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider(props: AuthProviderProps) {
   var children = props.children;
-  var [currentUser, setCurrentUser] = useState(null);
-  var [status, setStatus] = useState(REQUEST_STATUS.idle);
+  var [currentUser, setCurrentUser] = useState<User | null>(null);
+  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle as RequestStatus);
   var [error, setError] = useState('');
 
-  async function refreshProfile() {
-    setStatus(REQUEST_STATUS.loading);
+  async function refreshProfile(): Promise<User | null> {
+    setStatus(REQUEST_STATUS.loading as RequestStatus);
 
     try {
       var profile = await getProfile();
       setCurrentUser(profile);
       setError('');
-      setStatus(REQUEST_STATUS.success);
+      setStatus(REQUEST_STATUS.success as RequestStatus);
       return profile;
     } catch (err) {
       setError('Unable to load profile right now.');
-      setStatus(REQUEST_STATUS.error);
+      setStatus(REQUEST_STATUS.error as RequestStatus);
       return null;
     }
   }
 
-  async function loginUser(credentials) {
-    setStatus(REQUEST_STATUS.loading);
+  async function loginUser(credentials: LoginCredentials): Promise<User | null> {
+    setStatus(REQUEST_STATUS.loading as RequestStatus);
 
     try {
       var user = await login(credentials);
       setCurrentUser(user);
       setError('');
-      setStatus(REQUEST_STATUS.success);
+      setStatus(REQUEST_STATUS.success as RequestStatus);
       return user;
     } catch (err) {
       setError('Sign in failed. Please try again.');
-      setStatus(REQUEST_STATUS.error);
+      setStatus(REQUEST_STATUS.error as RequestStatus);
       return null;
     }
   }
 
-  async function updateUser(updates) {
+  async function updateUser(updates: Partial<User>): Promise<User> {
     var nextUser = await saveProfile(updates);
     setCurrentUser(nextUser);
     return nextUser;
   }
 
-  async function logoutUser() {
+  async function logoutUser(): Promise<void> {
     await logout();
     setCurrentUser(null);
   }
