@@ -5,7 +5,7 @@ import type {
   CheckoutForm,
   Order,
   OrderItem,
-  OrderPayment,
+  PaymentAuthResponse,
   User,
 } from '../types';
 
@@ -13,7 +13,7 @@ interface PlaceOrderPayload {
   totals: CartTotals;
   items: CartItem[];
   checkoutForm: CheckoutForm;
-  payment: OrderPayment;
+  payment: PaymentAuthResponse;
   user: User | null;
 }
 

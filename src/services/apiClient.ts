@@ -17,7 +17,7 @@ var database: Database = {
   user: { ...mockUser },
   orders: mockOrders.slice(),
   cart: {
-    id: mockUser.cartId,
+    id: mockUser.cartId ?? 'cart-default',
     items: [],
     updatedAt: null,
   },

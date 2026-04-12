@@ -39,6 +39,7 @@ export default function Checkout(): React.JSX.Element {
         tax: cart.tax,
         shipping: cart.shipping,
         total: cart.total,
+        itemCount: cart.itemCount,
       },
       user: auth.currentUser,
     });

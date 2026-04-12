@@ -1,11 +1,13 @@
+import type { SortOption } from '../hooks/useProducts';
+
 interface SearchBarProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   selectedCategory: string;
   onCategoryChange: (value: string) => void;
   categories?: string[];
-  sortBy: string;
-  onSortChange: (value: string) => void;
+  sortBy: SortOption;
+  onSortChange: (value: SortOption) => void;
   onClear: () => void;
 }
 
@@ -45,7 +47,7 @@ export default function SearchBar(props: SearchBarProps): React.JSX.Element {
         <select
           value={props.sortBy}
           onChange={function handleSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
-            props.onSortChange(event.target.value);
+            props.onSortChange(event.target.value as SortOption);
           }}
         >
           <option value="featured">Featured</option>

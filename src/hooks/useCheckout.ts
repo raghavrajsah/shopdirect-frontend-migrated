@@ -49,8 +49,8 @@ function createInitialForm(user: User | null | undefined): CheckoutForm {
 
 export default function useCheckout(user: User | null | undefined): UseCheckoutReturn {
   var [checkoutForm, setCheckoutForm] = useState<CheckoutForm>(createInitialForm(user));
-  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle as RequestStatus);
-  var [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(PAYMENT_STATUS.idle as PaymentStatus);
+  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle);
+  var [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(PAYMENT_STATUS.idle);
   var [error, setError] = useState('');
   var [latestOrder, setLatestOrder] = useState<Order | null>(null);
 
@@ -83,8 +83,8 @@ export default function useCheckout(user: User | null | undefined): UseCheckoutR
       return null;
     }
 
-    setStatus(REQUEST_STATUS.loading as RequestStatus);
-    setPaymentStatus(PAYMENT_STATUS.idle as PaymentStatus);
+    setStatus(REQUEST_STATUS.loading);
+    setPaymentStatus(PAYMENT_STATUS.idle);
 
     try {
       var payment: PaymentAuthResponse = await authorizePayment(checkoutForm, payload.totals.total);
@@ -99,12 +99,12 @@ export default function useCheckout(user: User | null | undefined): UseCheckoutR
       });
 
       setLatestOrder(order);
-      setStatus(REQUEST_STATUS.success as RequestStatus);
+      setStatus(REQUEST_STATUS.success);
       setError('');
       return order;
     } catch (err) {
-      setStatus(REQUEST_STATUS.error as RequestStatus);
-      setPaymentStatus(PAYMENT_STATUS.declined as PaymentStatus);
+      setStatus(REQUEST_STATUS.error);
+      setPaymentStatus(PAYMENT_STATUS.declined);
       setError('Checkout could not be completed.');
       return null;
     }

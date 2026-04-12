@@ -25,11 +25,7 @@ describe('useCart', function () {
     });
 
     act(function () {
-      result.result.current.addToCart({
-        ...mockProducts[2],
-        primaryImage: mockProducts[2].image,
-        displayPrice: mockProducts[2].salePrice,
-      }, 2);
+      result.result.current.addToCart(mockProducts[2], 2);
     });
 
     await waitFor(function () {
