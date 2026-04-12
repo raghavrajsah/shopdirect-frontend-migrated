@@ -5,8 +5,9 @@ import EmptyState from '../components/EmptyState';
 import useProducts from '../hooks/useProducts';
 import useCart from '../hooks/useCart';
 import { heroBanners } from '../data/mockData';
+import type { NormalizedProduct } from '../types';
 
-export default function Home() {
+export default function Home(): React.JSX.Element {
   var productsState = useProducts();
   var cart = useCart();
   var banner = heroBanners[0];
@@ -56,7 +57,7 @@ export default function Home() {
       ) : null}
 
       <section className="product-grid">
-        {productsState.products.map(function mapProduct(product) {
+        {productsState.products.map(function mapProduct(product: NormalizedProduct) {
           return (
             <ProductCard
               key={product.id}

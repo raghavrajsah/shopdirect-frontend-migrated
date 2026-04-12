@@ -9,21 +9,22 @@ import ProductCard from '../components/ProductCard';
 import useCart from '../hooks/useCart';
 import formatPrice from '../utils/formatPrice';
 import { ROUTES } from '../constants/routes';
+import type { NormalizedProduct } from '../types';
 
-export default function ProductDetail() {
+export default function ProductDetail(): React.JSX.Element {
   var params = useParams();
   var cart = useCart();
-  var [product, setProduct] = useState(null);
-  var [relatedProducts, setRelatedProducts] = useState([]);
-  var [quantity, setQuantity] = useState(1);
-  var [loading, setLoading] = useState(true);
+  var [product, setProduct] = useState<NormalizedProduct | null>(null);
+  var [relatedProducts, setRelatedProducts] = useState<NormalizedProduct[]>([]);
+  var [quantity, setQuantity] = useState<number>(1);
+  var [loading, setLoading] = useState<boolean>(true);
 
   useEffect(
     function loadProductPage() {
       var active = true;
       setLoading(true);
 
-      Promise.all([fetchProductById(params.productId), fetchProducts()]).then(function handleData(result) {
+      Promise.all([fetchProductById(params.productId), fetchProducts()]).then(function handleData(result: [NormalizedProduct | null, NormalizedProduct[]]) {
         var nextProduct = result[0];
         var allProducts = result[1];
 
@@ -34,7 +35,7 @@ export default function ProductDetail() {
         setProduct(nextProduct);
         setRelatedProducts(
           (allProducts || [])
-            .filter(function filterRelated(item) {
+            .filter(function filterRelated(item: NormalizedProduct) {
               return nextProduct && item.category === nextProduct.category && item.id !== nextProduct.id;
             })
             .slice(0, 3)
@@ -84,7 +85,7 @@ export default function ProductDetail() {
           <p className="muted-text">{product.description}</p>
 
           <div className="tag-list">
-            {(product.badges || []).map(function mapBadge(badge) {
+            {(product.badges || []).map(function mapBadge(badge: string) {
               return (
                 <span key={badge} className="tag">
                   {badge}
@@ -130,7 +131,7 @@ export default function ProductDetail() {
           <span className="muted-text">Same category, similar merchandising rules</span>
         </div>
         <div className="product-grid compact-grid">
-          {relatedProducts.map(function mapProduct(item) {
+          {relatedProducts.map(function mapProduct(item: NormalizedProduct) {
             return (
               <ProductCard key={item.id} product={item} onAddToCart={cart.addToCart} />
             );
