@@ -1,10 +1,15 @@
+import type { ReactElement, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { CartProvider } from '../contexts/CartContext';
 import Home from '../pages/Home';
 
-function Providers(props) {
+interface ProvidersProps {
+  children: ReactNode;
+}
+
+function Providers(props: ProvidersProps): ReactElement {
   return (
     <MemoryRouter>
       <AuthProvider>
