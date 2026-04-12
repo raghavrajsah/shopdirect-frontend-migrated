@@ -10,7 +10,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import Profile from './pages/Profile';
 import { ROUTES } from './constants/routes';
 
-function App() {
+function App(): React.JSX.Element {
   return (
     <div className="app-shell">
       <Navbar />
