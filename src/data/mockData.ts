@@ -1,4 +1,6 @@
-export const mockProducts = [
+import type { Product, User, Order, HeroBanner } from '../types';
+
+export const mockProducts: Product[] = [
   {
     id: 'sku-1001',
     slug: 'oak-and-iron-lamp',
@@ -152,7 +154,7 @@ export const mockProducts = [
   },
 ];
 
-export const mockUser = {
+export const mockUser: User = {
   id: 'user-001',
   firstName: 'Mia',
   lastName: 'Chen',
@@ -187,7 +189,7 @@ export const mockUser = {
   ],
 };
 
-export const mockOrders = [
+export const mockOrders: Order[] = [
   {
     id: 'ord-5001',
     status: 'delivered',
@@ -260,7 +262,7 @@ export const mockOrders = [
   },
 ];
 
-export const heroBanners = [
+export const heroBanners: HeroBanner[] = [
   {
     id: 'hero-spring',
     eyebrow: 'Warehouse favorites',
