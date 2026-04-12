@@ -5,4 +5,4 @@ export const ROUTES = {
   checkout: '/checkout',
   orderConfirmation: '/order-confirmation/:orderId',
   profile: '/profile',
-};
+} as const;
