@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { CartProvider } from '../contexts/CartContext';
 import useCart from '../hooks/useCart';
 import { mockProducts } from '../data/mockData';
 
-function Wrapper(props) {
+interface WrapperProps {
+  children: ReactNode;
+}
+
+function Wrapper(props: WrapperProps): React.ReactElement {
   return React.createElement(CartProvider, null, props.children);
 }
 
