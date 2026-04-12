@@ -2,7 +2,7 @@ import { createContext, useEffect, useRef, useState } from 'react';
 import { buildCartItem, syncCart } from '../services/cartService';
 import type { CartItem, Product } from '../types';
 
-interface CartContextValue {
+export interface CartContextValue {
   items: CartItem[];
   isDrawerOpen: boolean;
   lastAddedProductId: string | null;

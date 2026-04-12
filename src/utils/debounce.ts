@@ -1,4 +1,4 @@
-export default function debounce<T extends (...args: unknown[]) => void>(
+export default function debounce<T extends (...args: any[]) => void>(
   callback: T,
   wait?: number,
 ): (...args: Parameters<T>) => void {

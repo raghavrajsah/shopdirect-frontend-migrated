@@ -1,17 +1,6 @@
 import { useContext, useState } from 'react';
-import AuthContext from '../contexts/AuthContext';
-import type { LoginCredentials, RequestStatus, User } from '../types';
-
-interface AuthContextValue {
-  currentUser: User | null;
-  status: RequestStatus;
-  error: string;
-  isAuthenticated: boolean;
-  loginUser: (credentials: LoginCredentials) => Promise<User | null>;
-  logoutUser: () => Promise<void>;
-  refreshProfile: () => Promise<User | null>;
-  updateUser: (updates: Partial<User>) => Promise<User>;
-}
+import AuthContext, { type AuthContextValue } from '../contexts/AuthContext';
+import type { User } from '../types';
 
 interface UseAuthReturn extends AuthContextValue {
   notice: string;
@@ -20,7 +9,7 @@ interface UseAuthReturn extends AuthContextValue {
 }
 
 export default function useAuth(): UseAuthReturn {
-  var auth = useContext(AuthContext) as AuthContextValue | null;
+  var auth = useContext(AuthContext);
   var [notice, setNotice] = useState('');
 
   if (!auth) {

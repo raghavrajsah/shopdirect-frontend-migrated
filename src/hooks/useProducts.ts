@@ -4,7 +4,7 @@ import { REQUEST_STATUS } from '../constants/statuses';
 import useSearch from './useSearch';
 import type { NormalizedProduct, RequestStatus } from '../types';
 
-type SortOption = 'featured' | 'price-low' | 'price-high' | 'top-rated';
+export type SortOption = 'featured' | 'price-low' | 'price-high' | 'top-rated';
 
 interface UseProductsReturn {
   products: NormalizedProduct[];
@@ -24,7 +24,7 @@ interface UseProductsReturn {
 export default function useProducts(): UseProductsReturn {
   var [products, setProducts] = useState<NormalizedProduct[]>([]);
   var [visibleProducts, setVisibleProducts] = useState<NormalizedProduct[]>([]);
-  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle as RequestStatus);
+  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle);
   var [error, setError] = useState('');
   var [selectedCategory, setSelectedCategory] = useState('all');
   var [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -33,7 +33,7 @@ export default function useProducts(): UseProductsReturn {
   useEffect(function loadProducts() {
     var active = true;
 
-    setStatus(REQUEST_STATUS.loading as RequestStatus);
+    setStatus(REQUEST_STATUS.loading);
     fetchProducts()
       .then(function handleProducts(items: NormalizedProduct[]) {
         if (!active) {
@@ -42,7 +42,7 @@ export default function useProducts(): UseProductsReturn {
 
         setProducts(items);
         setVisibleProducts(items);
-        setStatus(REQUEST_STATUS.success as RequestStatus);
+        setStatus(REQUEST_STATUS.success);
       })
       .catch(function handleError() {
         if (!active) {
@@ -50,7 +50,7 @@ export default function useProducts(): UseProductsReturn {
         }
 
         setError('Products could not be loaded.');
-        setStatus(REQUEST_STATUS.error as RequestStatus);
+        setStatus(REQUEST_STATUS.error);
       });
 
     return function stopUpdates() {

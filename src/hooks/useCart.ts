@@ -1,19 +1,7 @@
 import { useContext } from 'react';
-import CartContext from '../contexts/CartContext';
+import CartContext, { type CartContextValue } from '../contexts/CartContext';
 import calculateCartTotal from '../utils/calculateCartTotal';
-import type { CartItem, CartTotals, NormalizedProduct } from '../types';
-
-interface CartContextValue {
-  items: CartItem[];
-  isDrawerOpen: boolean;
-  lastAddedProductId: string | null;
-  addToCart: (product: NormalizedProduct, quantity?: number) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
-  openDrawer: () => void;
-  closeDrawer: () => void;
-}
+import type { CartItem, CartTotals } from '../types';
 
 interface UseCartReturn extends CartContextValue, CartTotals {
   hasItems: boolean;
@@ -21,7 +9,7 @@ interface UseCartReturn extends CartContextValue, CartTotals {
 }
 
 export default function useCart(): UseCartReturn {
-  var cart = useContext(CartContext) as CartContextValue | null;
+  var cart = useContext(CartContext);
 
   if (!cart) {
     throw new Error('useCart must be used inside CartProvider');

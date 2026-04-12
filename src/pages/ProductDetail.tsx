@@ -24,7 +24,7 @@ export default function ProductDetail(): React.JSX.Element {
       var active = true;
       setLoading(true);
 
-      Promise.all([fetchProductById(params.productId), fetchProducts()]).then(function handleData(result: [NormalizedProduct | null, NormalizedProduct[]]) {
+      Promise.all([fetchProductById(params.productId!), fetchProducts()]).then(function handleData(result: [NormalizedProduct | null, NormalizedProduct[]]) {
         var nextProduct = result[0];
         var allProducts = result[1];
 
@@ -116,7 +116,9 @@ export default function ProductDetail(): React.JSX.Element {
             <button
               className="button"
               onClick={function handleAddToCart() {
-                cart.addToCart(product, quantity);
+                if (product) {
+                  cart.addToCart(product, quantity);
+                }
               }}
             >
               Add {quantity} to cart
