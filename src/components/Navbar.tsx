@@ -3,11 +3,11 @@ import { ROUTES } from '../constants/routes';
 import useCart from '../hooks/useCart';
 import useAuth from '../hooks/useAuth';
 
-function navClassName(props) {
+function navClassName(props: { isActive: boolean }): string {
   return props.isActive ? 'nav-link nav-link-active' : 'nav-link';
 }
 
-export default function Navbar() {
+export default function Navbar(): React.JSX.Element {
   var cart = useCart();
   var auth = useAuth();
 

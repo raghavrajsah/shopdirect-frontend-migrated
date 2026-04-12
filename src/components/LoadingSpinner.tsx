@@ -1,4 +1,8 @@
-export default function LoadingSpinner(props) {
+interface LoadingSpinnerProps {
+  label?: string;
+}
+
+export default function LoadingSpinner(props: LoadingSpinnerProps): React.JSX.Element {
   var label = props.label || 'Loading';
 
   return (

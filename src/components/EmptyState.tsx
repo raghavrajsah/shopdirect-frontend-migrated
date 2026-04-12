@@ -1,7 +1,14 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 
-export default function EmptyState(props) {
+interface EmptyStateProps {
+  title?: string;
+  description?: string;
+  actionLabel?: string;
+  actionTo?: string;
+}
+
+export default function EmptyState(props: EmptyStateProps): React.JSX.Element {
   var title = props.title || 'Nothing here yet';
   var description =
     props.description || 'Try another search or head back to the storefront.';

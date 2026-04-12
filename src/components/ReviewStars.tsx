@@ -1,6 +1,13 @@
 import { resolveProductRating, resolveReviewCount } from '../services/productService';
+import type { Product } from '../types';
 
-export default function ReviewStars(props) {
+interface ReviewStarsProps {
+  rating?: number;
+  reviewCount?: number;
+  product?: Product;
+}
+
+export default function ReviewStars(props: ReviewStarsProps): React.JSX.Element {
   var rating = props.rating;
   var reviewCount = props.reviewCount;
   var product = props.product;

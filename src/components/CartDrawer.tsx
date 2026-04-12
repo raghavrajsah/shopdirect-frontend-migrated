@@ -3,8 +3,9 @@ import { ROUTES } from '../constants/routes';
 import useCart from '../hooks/useCart';
 import formatPrice from '../utils/formatPrice';
 import QuantitySelector from './QuantitySelector';
+import type { CartItem } from '../types';
 
-export default function CartDrawer() {
+export default function CartDrawer(): React.JSX.Element {
   var cart = useCart();
 
   return (
@@ -27,7 +28,7 @@ export default function CartDrawer() {
               <span className="muted-text">Add something from the homepage to get started.</span>
             </div>
           ) : (
-            cart.items.map(function mapItem(item) {
+            cart.items.map(function mapItem(item: CartItem) {
               return (
                 <div key={item.productId} className="drawer-item">
                   <img src={item.image} alt={item.title} className="drawer-item-image" />
@@ -36,7 +37,7 @@ export default function CartDrawer() {
                     <span className="muted-text">{formatPrice(item.price)}</span>
                     <QuantitySelector
                       value={item.quantity}
-                      onChange={function handleQuantityChange(nextQuantity) {
+                      onChange={function handleQuantityChange(nextQuantity: number) {
                         cart.updateQuantity(item.productId, nextQuantity);
                       }}
                     />

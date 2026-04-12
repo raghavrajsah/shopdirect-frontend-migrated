@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function Footer(): React.JSX.Element {
   return (
     <footer className="footer-shell">
       <div className="footer-inner">
