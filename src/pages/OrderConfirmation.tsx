@@ -5,12 +5,15 @@ import formatDate from '../utils/formatDate';
 import formatPrice from '../utils/formatPrice';
 import { getLatestOrder } from '../services/orderService';
 import { ROUTES } from '../constants/routes';
+import type { Order } from '../types';
 
-export default function OrderConfirmation() {
+export default function OrderConfirmation(): React.JSX.Element {
   var params = useParams();
   var location = useLocation();
-  var [order, setOrder] = useState(location.state && location.state.order);
-  var [loading, setLoading] = useState(!order);
+  var [order, setOrder] = useState<Order | null>(
+    (location.state as { order?: Order } | null)?.order ?? null
+  );
+  var [loading, setLoading] = useState<boolean>(!order);
 
   useEffect(
     function loadFallbackOrder() {
@@ -18,8 +21,8 @@ export default function OrderConfirmation() {
         return;
       }
 
-      getLatestOrder().then(function handleLatestOrder(nextOrder) {
-        setOrder(nextOrder);
+      getLatestOrder().then(function handleLatestOrder(nextOrder: Order | undefined) {
+        setOrder(nextOrder ?? null);
         setLoading(false);
       });
     },

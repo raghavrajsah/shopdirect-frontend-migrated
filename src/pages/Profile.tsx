@@ -5,16 +5,17 @@ import useAuth from '../hooks/useAuth';
 import { getOrderHistory } from '../services/orderService';
 import formatDate from '../utils/formatDate';
 import formatPrice from '../utils/formatPrice';
+import type { Address, Order } from '../types';
 
-export default function Profile() {
+export default function Profile(): React.JSX.Element {
   var auth = useAuth();
-  var [orders, setOrders] = useState([]);
-  var [loading, setLoading] = useState(true);
+  var [orders, setOrders] = useState<Order[]>([]);
+  var [loading, setLoading] = useState<boolean>(true);
 
   useEffect(function loadOrders() {
     var active = true;
 
-    getOrderHistory().then(function handleOrders(nextOrders) {
+    getOrderHistory().then(function handleOrders(nextOrders: Order[]) {
       if (!active) {
         return;
       }
@@ -62,7 +63,7 @@ export default function Profile() {
 
         <div className="stack">
           <strong>Saved addresses</strong>
-          {(auth.currentUser.savedAddresses || []).map(function mapAddress(address) {
+          {(auth.currentUser.savedAddresses || []).map(function mapAddress(address: Address) {
             return (
               <div key={address.id} className="address-card">
                 <strong>{address.label}</strong>
@@ -80,7 +81,7 @@ export default function Profile() {
         <span className="eyebrow">Order history</span>
         <h2>Recent orders</h2>
         <div className="stack">
-          {orders.map(function mapOrder(order) {
+          {orders.map(function mapOrder(order: Order) {
             return (
               <div key={order.id} className="order-row">
                 <div className="stack">

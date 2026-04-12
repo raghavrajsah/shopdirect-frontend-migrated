@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -6,8 +7,9 @@ import useCart from '../hooks/useCart';
 import useCheckout from '../hooks/useCheckout';
 import formatPrice from '../utils/formatPrice';
 import { ROUTES } from '../constants/routes';
+import type { CartItem } from '../types';
 
-export default function Checkout() {
+export default function Checkout(): React.JSX.Element {
   var auth = useAuth();
   var cart = useCart();
   var navigate = useNavigate();
@@ -27,7 +29,7 @@ export default function Checkout() {
     );
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
     var order = await checkout.submitCheckout({
@@ -64,7 +66,7 @@ export default function Checkout() {
             Email
             <input
               value={checkout.checkoutForm.email}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('email', event.target.value);
               }}
             />
@@ -73,7 +75,7 @@ export default function Checkout() {
             Full name
             <input
               value={checkout.checkoutForm.fullName}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('fullName', event.target.value);
               }}
             />
@@ -82,7 +84,7 @@ export default function Checkout() {
             Address
             <input
               value={checkout.checkoutForm.address1}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('address1', event.target.value);
               }}
             />
@@ -91,7 +93,7 @@ export default function Checkout() {
             City
             <input
               value={checkout.checkoutForm.city}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('city', event.target.value);
               }}
             />
@@ -100,7 +102,7 @@ export default function Checkout() {
             State
             <input
               value={checkout.checkoutForm.state}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('state', event.target.value);
               }}
             />
@@ -109,7 +111,7 @@ export default function Checkout() {
             Postal code
             <input
               value={checkout.checkoutForm.postalCode}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('postalCode', event.target.value);
               }}
             />
@@ -118,7 +120,7 @@ export default function Checkout() {
             Cardholder
             <input
               value={checkout.checkoutForm.cardName}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('cardName', event.target.value);
               }}
             />
@@ -128,7 +130,7 @@ export default function Checkout() {
             <input
               placeholder="4242 4242 4242 4242"
               value={checkout.checkoutForm.cardNumber}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('cardNumber', event.target.value);
               }}
             />
@@ -138,7 +140,7 @@ export default function Checkout() {
             <input
               placeholder="04/28"
               value={checkout.checkoutForm.expiry}
-              onChange={function handleChange(event) {
+              onChange={function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
                 checkout.setFieldValue('expiry', event.target.value);
               }}
             />
@@ -155,7 +157,7 @@ export default function Checkout() {
       <aside className="section-card checkout-summary">
         <div className="stack">
           <h2>Cart summary</h2>
-          {cart.items.map(function mapItem(item) {
+          {cart.items.map(function mapItem(item: CartItem) {
             return (
               <div key={item.productId} className="inline-row space-between">
                 <span>

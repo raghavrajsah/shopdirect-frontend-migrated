@@ -4,8 +4,9 @@ import QuantitySelector from '../components/QuantitySelector';
 import useCart from '../hooks/useCart';
 import formatPrice from '../utils/formatPrice';
 import { ROUTES } from '../constants/routes';
+import type { CartItem } from '../types';
 
-export default function Cart() {
+export default function Cart(): React.JSX.Element {
   var cart = useCart();
 
   if (!cart.hasItems) {
@@ -28,7 +29,7 @@ export default function Cart() {
         </div>
 
         <div className="stack">
-          {cart.items.map(function mapItem(item) {
+          {cart.items.map(function mapItem(item: CartItem) {
             return (
               <div key={item.productId} className="cart-line">
                 <img src={item.image} alt={item.title} className="cart-line-image" />
@@ -39,7 +40,7 @@ export default function Cart() {
                 </div>
                 <QuantitySelector
                   value={item.quantity}
-                  onChange={function changeQuantity(nextQuantity) {
+                  onChange={function changeQuantity(nextQuantity: number) {
                     cart.updateQuantity(item.productId, nextQuantity);
                   }}
                 />
