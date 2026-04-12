@@ -3,8 +3,34 @@ import { PAYMENT_STATUS, REQUEST_STATUS } from '../constants/statuses';
 import { placeOrder } from '../services/orderService';
 import { authorizePayment } from '../services/paymentService';
 import validateEmail from '../utils/validateEmail';
+import type {
+  CartItem,
+  CartTotals,
+  CheckoutForm,
+  Order,
+  PaymentAuthResponse,
+  PaymentStatus,
+  RequestStatus,
+  User,
+} from '../types';
 
-function createInitialForm(user) {
+interface CheckoutPayload {
+  items: CartItem[];
+  totals: CartTotals;
+  user: User | null;
+}
+
+interface UseCheckoutReturn {
+  checkoutForm: CheckoutForm;
+  status: RequestStatus;
+  paymentStatus: PaymentStatus;
+  error: string;
+  latestOrder: Order | null;
+  setFieldValue: (name: keyof CheckoutForm, value: string) => void;
+  submitCheckout: (payload: CheckoutPayload) => Promise<Order | null>;
+}
+
+function createInitialForm(user: User | null | undefined): CheckoutForm {
   var primaryAddress = user && user.savedAddresses && user.savedAddresses[0];
 
   return {
@@ -21,16 +47,16 @@ function createInitialForm(user) {
   };
 }
 
-export default function useCheckout(user) {
-  var [checkoutForm, setCheckoutForm] = useState(createInitialForm(user));
-  var [status, setStatus] = useState(REQUEST_STATUS.idle);
-  var [paymentStatus, setPaymentStatus] = useState(PAYMENT_STATUS.idle);
+export default function useCheckout(user: User | null | undefined): UseCheckoutReturn {
+  var [checkoutForm, setCheckoutForm] = useState<CheckoutForm>(createInitialForm(user));
+  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle as RequestStatus);
+  var [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(PAYMENT_STATUS.idle as PaymentStatus);
   var [error, setError] = useState('');
-  var [latestOrder, setLatestOrder] = useState(null);
+  var [latestOrder, setLatestOrder] = useState<Order | null>(null);
 
   useEffect(
     function refreshCheckoutForm() {
-      setCheckoutForm(function mergeWithUser(currentForm) {
+      setCheckoutForm(function mergeWithUser(currentForm: CheckoutForm): CheckoutForm {
         return {
           ...createInitialForm(user),
           cardName: currentForm.cardName,
@@ -42,8 +68,8 @@ export default function useCheckout(user) {
     [user]
   );
 
-  function setFieldValue(name, value) {
-    setCheckoutForm(function updateField(currentForm) {
+  function setFieldValue(name: keyof CheckoutForm, value: string): void {
+    setCheckoutForm(function updateField(currentForm: CheckoutForm): CheckoutForm {
       return {
         ...currentForm,
         [name]: value,
@@ -51,20 +77,20 @@ export default function useCheckout(user) {
     });
   }
 
-  async function submitCheckout(payload) {
+  async function submitCheckout(payload: CheckoutPayload): Promise<Order | null> {
     if (!validateEmail(checkoutForm.email)) {
       setError('Please enter a valid email address.');
       return null;
     }
 
-    setStatus(REQUEST_STATUS.loading);
-    setPaymentStatus(PAYMENT_STATUS.idle);
+    setStatus(REQUEST_STATUS.loading as RequestStatus);
+    setPaymentStatus(PAYMENT_STATUS.idle as PaymentStatus);
 
     try {
-      var payment = await authorizePayment(checkoutForm, payload.totals.total);
-      setPaymentStatus(payment.status);
+      var payment: PaymentAuthResponse = await authorizePayment(checkoutForm, payload.totals.total);
+      setPaymentStatus(payment.status as PaymentStatus);
 
-      var order = await placeOrder({
+      var order: Order = await placeOrder({
         items: payload.items,
         totals: payload.totals,
         checkoutForm: checkoutForm,
@@ -73,12 +99,12 @@ export default function useCheckout(user) {
       });
 
       setLatestOrder(order);
-      setStatus(REQUEST_STATUS.success);
+      setStatus(REQUEST_STATUS.success as RequestStatus);
       setError('');
       return order;
     } catch (err) {
-      setStatus(REQUEST_STATUS.error);
-      setPaymentStatus(PAYMENT_STATUS.declined);
+      setStatus(REQUEST_STATUS.error as RequestStatus);
+      setPaymentStatus(PAYMENT_STATUS.declined as PaymentStatus);
       setError('Checkout could not be completed.');
       return null;
     }
