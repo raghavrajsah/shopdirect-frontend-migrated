@@ -1,7 +1,8 @@
 import { post } from './apiClient';
 import { resolveProductImage, resolveProductPrice } from './productService';
+import type { Cart, CartItem, Product } from '../types';
 
-export function buildCartItem(product, quantity) {
+export function buildCartItem(product: Product, quantity?: number): CartItem {
   return {
     id: 'line-' + product.id,
     productId: product.id,
@@ -24,7 +25,7 @@ export function buildCartItem(product, quantity) {
   };
 }
 
-export function mergeCartItems(items, nextItem) {
+export function mergeCartItems(items: CartItem[] | null, nextItem: CartItem): CartItem[] {
   return (items || []).map(function mergeItem(item) {
     if (item.productId !== nextItem.productId) {
       return item;
@@ -37,8 +38,8 @@ export function mergeCartItems(items, nextItem) {
   });
 }
 
-export async function syncCart(items) {
+export async function syncCart(items: CartItem[]): Promise<Cart> {
   return post('/cart/sync', {
     items: items || [],
-  });
+  }) as Promise<Cart>;
 }

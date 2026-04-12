@@ -1,25 +1,42 @@
 import { get, post } from './apiClient';
+import type {
+  CartItem,
+  CartTotals,
+  CheckoutForm,
+  Order,
+  OrderItem,
+  OrderPayment,
+  User,
+} from '../types';
 
-function mapOrderItem(item) {
+interface PlaceOrderPayload {
+  totals: CartTotals;
+  items: CartItem[];
+  checkoutForm: CheckoutForm;
+  payment: OrderPayment;
+  user: User | null;
+}
+
+function mapOrderItem(item: CartItem): OrderItem {
   return {
     productId: item.productId,
-    name: item.title || item.name,
+    name: item.title,
     quantity: item.quantity,
     price: item.price,
     image: item.image,
   };
 }
 
-export async function getOrderHistory() {
-  return get('/orders');
+export async function getOrderHistory(): Promise<Order[]> {
+  return get('/orders') as Promise<Order[]>;
 }
 
-export async function getLatestOrder() {
+export async function getLatestOrder(): Promise<Order | undefined> {
   var orders = await getOrderHistory();
   return orders && orders[0];
 }
 
-export async function placeOrder(payload) {
+export async function placeOrder(payload: PlaceOrderPayload): Promise<Order> {
   var orderPayload = {
     status: 'placed',
     subtotal: payload.totals.subtotal,
@@ -41,5 +58,5 @@ export async function placeOrder(payload) {
     },
   };
 
-  return post('/orders', orderPayload);
+  return post('/orders', orderPayload as Record<string, unknown>) as Promise<Order>;
 }
