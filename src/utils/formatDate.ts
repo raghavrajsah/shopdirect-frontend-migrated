@@ -1,9 +1,9 @@
-export default function formatDate(value) {
+export default function formatDate(value: string | number | Date | null | undefined): string {
   if (!value) {
     return 'Recently';
   }
 
-  var date = new Date(value);
+  var date: Date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
     return 'Recently';

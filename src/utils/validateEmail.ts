@@ -1,4 +1,4 @@
-export default function validateEmail(email) {
+export default function validateEmail(email: string | null | undefined): boolean {
   if (!email) {
     return false;
   }
