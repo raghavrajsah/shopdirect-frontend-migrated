@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import debounce from '../utils/debounce';
 
-export default function useSearch(initialValue) {
+interface UseSearchReturn {
+  searchTerm: string;
+  debouncedTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  clearSearch: () => void;
+}
+
+export default function useSearch(initialValue: string): UseSearchReturn {
   var [searchTerm, setSearchTerm] = useState(initialValue || '');
   var [debouncedTerm, setDebouncedTerm] = useState(initialValue || '');
 
   useEffect(
     function updateDebouncedValue() {
-      var updateSearch = debounce(function handleSearch(nextValue) {
+      var updateSearch = debounce(function handleSearch(nextValue: string) {
         setDebouncedTerm(nextValue.trim().toLowerCase());
       }, 220);
 
@@ -16,7 +23,7 @@ export default function useSearch(initialValue) {
     [searchTerm]
   );
 
-  function clearSearch() {
+  function clearSearch(): void {
     setSearchTerm('');
     setDebouncedTerm('');
   }

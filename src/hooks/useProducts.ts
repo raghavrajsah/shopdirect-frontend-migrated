@@ -2,29 +2,47 @@ import { useEffect, useState } from 'react';
 import { fetchProducts } from '../services/productService';
 import { REQUEST_STATUS } from '../constants/statuses';
 import useSearch from './useSearch';
+import type { NormalizedProduct, RequestStatus } from '../types';
 
-export default function useProducts() {
-  var [products, setProducts] = useState([]);
-  var [visibleProducts, setVisibleProducts] = useState([]);
-  var [status, setStatus] = useState(REQUEST_STATUS.idle);
+type SortOption = 'featured' | 'price-low' | 'price-high' | 'top-rated';
+
+interface UseProductsReturn {
+  products: NormalizedProduct[];
+  allProducts: NormalizedProduct[];
+  categories: string[];
+  status: RequestStatus;
+  error: string;
+  selectedCategory: string;
+  sortBy: SortOption;
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  clearSearch: () => void;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setSortBy: React.Dispatch<React.SetStateAction<SortOption>>;
+}
+
+export default function useProducts(): UseProductsReturn {
+  var [products, setProducts] = useState<NormalizedProduct[]>([]);
+  var [visibleProducts, setVisibleProducts] = useState<NormalizedProduct[]>([]);
+  var [status, setStatus] = useState<RequestStatus>(REQUEST_STATUS.idle as RequestStatus);
   var [error, setError] = useState('');
   var [selectedCategory, setSelectedCategory] = useState('all');
-  var [sortBy, setSortBy] = useState('featured');
+  var [sortBy, setSortBy] = useState<SortOption>('featured');
   var search = useSearch('');
 
   useEffect(function loadProducts() {
     var active = true;
 
-    setStatus(REQUEST_STATUS.loading);
+    setStatus(REQUEST_STATUS.loading as RequestStatus);
     fetchProducts()
-      .then(function handleProducts(items) {
+      .then(function handleProducts(items: NormalizedProduct[]) {
         if (!active) {
           return;
         }
 
         setProducts(items);
         setVisibleProducts(items);
-        setStatus(REQUEST_STATUS.success);
+        setStatus(REQUEST_STATUS.success as RequestStatus);
       })
       .catch(function handleError() {
         if (!active) {
@@ -32,7 +50,7 @@ export default function useProducts() {
         }
 
         setError('Products could not be loaded.');
-        setStatus(REQUEST_STATUS.error);
+        setStatus(REQUEST_STATUS.error as RequestStatus);
       });
 
     return function stopUpdates() {
@@ -45,13 +63,13 @@ export default function useProducts() {
       var nextProducts = products.slice();
 
       if (selectedCategory !== 'all') {
-        nextProducts = nextProducts.filter(function filterByCategory(product) {
+        nextProducts = nextProducts.filter(function filterByCategory(product: NormalizedProduct) {
           return product.category === selectedCategory;
         });
       }
 
       if (search.debouncedTerm) {
-        nextProducts = nextProducts.filter(function filterBySearch(product) {
+        nextProducts = nextProducts.filter(function filterBySearch(product: NormalizedProduct) {
           var haystack = [
             product.name,
             product.category,
@@ -66,7 +84,7 @@ export default function useProducts() {
         });
       }
 
-      nextProducts.sort(function sortProducts(a, b) {
+      nextProducts.sort(function sortProducts(a: NormalizedProduct, b: NormalizedProduct) {
         if (sortBy === 'price-low') {
           return a.displayPrice - b.displayPrice;
         }
@@ -87,10 +105,10 @@ export default function useProducts() {
     [products, selectedCategory, sortBy, search.debouncedTerm]
   );
 
-  var categories = ['all'].concat(
+  var categories: string[] = ['all'].concat(
     Array.from(
       new Set(
-        products.map(function mapCategory(product) {
+        products.map(function mapCategory(product: NormalizedProduct) {
           return product.category;
         })
       )
