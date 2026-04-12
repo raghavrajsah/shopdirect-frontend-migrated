@@ -1,6 +1,7 @@
 import { get } from './apiClient';
+import type { NormalizedProduct, Product } from '../types';
 
-export function resolveProductPrice(product) {
+export function resolveProductPrice(product: Product | null | undefined): number {
   if (!product) {
     return 0;
   }
@@ -20,7 +21,7 @@ export function resolveProductPrice(product) {
   return 0;
 }
 
-export function resolveProductImage(product) {
+export function resolveProductImage(product: Product | null | undefined): string {
   return (
     (product && product.image) ||
     (product && product.images && product.images[0]) ||
@@ -29,7 +30,7 @@ export function resolveProductImage(product) {
   );
 }
 
-export function resolveProductRating(product) {
+export function resolveProductRating(product: Product | null | undefined): number {
   return (
     (product && product.rating && product.rating.average) ||
     (product && product.rating && product.rating.value) ||
@@ -38,16 +39,15 @@ export function resolveProductRating(product) {
   );
 }
 
-export function resolveReviewCount(product) {
+export function resolveReviewCount(product: Product | null | undefined): number {
   return (
     (product && product.rating && product.rating.count) ||
     (product && product.reviewCount) ||
-    (product && product.reviews && product.reviews.length) ||
     0
   );
 }
 
-function normalizeProduct(product) {
+function normalizeProduct(product: Product): NormalizedProduct {
   return {
     ...product,
     displayPrice: resolveProductPrice(product),
@@ -57,17 +57,17 @@ function normalizeProduct(product) {
   };
 }
 
-export async function fetchProducts() {
-  var products = await get('/products');
+export async function fetchProducts(): Promise<NormalizedProduct[]> {
+  var products = (await get('/products')) as Product[] | null;
   return (products || []).map(normalizeProduct);
 }
 
-export async function fetchProductById(productId) {
-  var product = await get('/products/' + productId);
+export async function fetchProductById(productId: string): Promise<NormalizedProduct | null> {
+  var product = (await get('/products/' + productId)) as Product | null;
   return product ? normalizeProduct(product) : null;
 }
 
-export async function fetchFeaturedProducts() {
+export async function fetchFeaturedProducts(): Promise<NormalizedProduct[]> {
   var products = await fetchProducts();
   return products.filter(function onlyFeatured(product) {
     return product.featured;
