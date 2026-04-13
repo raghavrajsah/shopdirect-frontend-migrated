@@ -1,6 +1,6 @@
 # ShopDirect Frontend (TypeScript — Post-Migration)
 
-This is the **output** of running the [ShopDirect Migration Orchestrator](https://github.com/raghavrajsah/shopdirect-migration) on the [original JavaScript frontend](https://github.com/raghavrajsah/shopdirect-frontend-v3).
+This is the **output** of running the [ShopDirect Migration Orchestrator](https://github.com/raghavrajsah/shopdirect-migration) on the [original JavaScript frontend](https://github.com/raghavrajsah/shopdirect-frontend-js).
 
 The entire codebase was migrated from JavaScript to TypeScript in a single automated run — 44 files, 12 PRs, 54 minutes, zero human intervention.
 
@@ -52,4 +52,4 @@ npm test             # run tests (5/5 pass)
 ## Related repos
 
 - [Migration Orchestrator](https://github.com/raghavrajsah/shopdirect-migration) — the CLI tool that ran this migration
-- [Original Frontend (JavaScript)](https://github.com/raghavrajsah/shopdirect-frontend-v3) — the pre-migration baseline
+- [Original Frontend (JavaScript)](https://github.com/raghavrajsah/shopdirect-frontend-js) — the pre-migration baseline
